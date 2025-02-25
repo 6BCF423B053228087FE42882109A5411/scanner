@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student History</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; }
+        table { width: 80%; margin: auto; border-collapse: collapse; }
+        th, td { border: 1px solid black; padding: 10px; }
+    </style>
+</head>
+<body>
+    <h1>Student Attendance History</h1>
+    <button onclick="fetchHistory()">Refresh History</button>
+    <table>
+        <thead>
+            <tr>
+                <th>Student ID</th>
+                <th>Name</th>
+                <th>Class</th>
+                <th>Date</th>
+                <th>Time In</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody id="history-body">
+            <tr><td colspan="6">No Data Available</td></tr>
+        </tbody>
+    </table>
+
+    <script>
+        async function fetchHistory() {
+            const response = await fetch("http://localhost:5000/get-history");
+            const data = await response.json();
+            const tableBody = document.getElementById("history-body");
+
+            tableBody.innerHTML = ""; // Clear existing data
+
+            data.forEach(student => {
+                const row = `<tr>
+                    <td>${student.studentId}</td>
+                    <td>${student.name}</td>
+                    <td>${student.class}</td>
+                    <td>${student.date}</td>
+                    <td>${student.timeIn}</td>
+                    <td>${student.status}</td>
+                </tr>`;
+                tableBody.innerHTML += row;
+            });
+        }
+
+        fetchHistory();
+    </script>
+</body>
+</html>
